@@ -1,61 +1,26 @@
 import React from 'react'
 import PropTyps from 'prop-types'
+import { connect } from 'react-redux'
 
+import { fetchComicById } from '../store/action'
+// import { dispatch } from '../store/store'
 import Loading from '../../components/Loading'
 
 const withData = (WrappedComponent) => {
-  return class ComponentWithData extends React.Component {
+  class ComponentWithData extends React.Component {
     static propTypes = {
       id: PropTyps.string,
-    }
-
-    constructor(props) {
-      super(props)
-
-      this.state = {
-        data: null,
-        loading: false,
-        error: null,
-      }
+      dispatchFetch: PropTyps.func,
+      comics: PropTyps.object,
     }
 
     componentDidMount() {
-      const { id } = this.props
-
-      this.setState((state) => ({
-        ...state,
-        loading: true,
-      }))
-
-      // eslint-disable-next-line no-undef
-      const url = id
-        ? `${process.env.REACT_APP_API}/comics/${id}`
-        : `${process.env.REACT_APP_API}/comics/current`
-      fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-        .then((response) => response.json())
-        .then((result) =>
-          this.setState({
-            data: result,
-            loading: false,
-            error: null,
-          }),
-        )
-        .catch((err) =>
-          this.setState((state) => ({
-            ...state,
-            loading: false,
-            error: err,
-          })),
-        )
+      const { id, dispatchFetch } = this.props
+      dispatchFetch(id)
     }
 
     render() {
-      const { data, error, loading } = this.state
+      const { data, error, loading } = this.props.comics
 
       if (error) return <div>{error.message}</div>
       return (
@@ -66,6 +31,12 @@ const withData = (WrappedComponent) => {
       )
     }
   }
+  const mapStateToProps = (state) => state
+  const mapDispatchToProps = (dispatch) => ({
+    dispatchFetch: (id) => dispatch(fetchComicById(id)),
+  })
+
+  return connect(mapStateToProps, mapDispatchToProps)(ComponentWithData)
 }
 
 export default withData
