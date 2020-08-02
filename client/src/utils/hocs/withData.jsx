@@ -3,7 +3,6 @@ import PropTyps from 'prop-types'
 import { connect } from 'react-redux'
 
 import { fetchComicById } from '../store/action'
-// import { dispatch } from '../store/store'
 import Loading from '../../components/Loading'
 
 const withData = (WrappedComponent) => {
@@ -14,9 +13,22 @@ const withData = (WrappedComponent) => {
       comics: PropTyps.object,
     }
 
+    _isMounted = false
+
     componentDidMount() {
+      this._isMounted = true
       const { id, dispatchFetch } = this.props
+
       dispatchFetch(id)
+    }
+
+    componentWillUnmount() {
+      this._isMounted = false
+    }
+
+    shouldComponentUpdate() {
+      if (!this._isMounted) return false
+      return true
     }
 
     render() {
