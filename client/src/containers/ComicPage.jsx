@@ -6,11 +6,8 @@ import withData from '../utils/hocs/withData'
 
 function ComicPage(props) {
   return (
-    <div>
-      <h1>Comics</h1>
-      <div>
-        <Card {...props.data} />
-      </div>
+    <div className="container">
+      <Card {...props.data} />
     </div>
   )
 }

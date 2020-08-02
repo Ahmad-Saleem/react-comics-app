@@ -1,6 +1,14 @@
 import React, { useCallback, useState } from 'react'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
+
 import Popover from './Popover'
+
+const StyledCard = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+`
 
 export default function Card(props) {
   const [popover, setPopover] = useState(false)
@@ -14,16 +22,19 @@ export default function Card(props) {
   }, [])
 
   return (
-    <div
-      onMouseOver={mouseOverHandler}
-      onMouseOut={mouseOutHandler}
-      style={{ position: 'relative' }}>
+    <StyledCard onMouseEnter={mouseOverHandler} onMouseLeave={mouseOutHandler}>
       {popover && <Popover>{props.alt}</Popover>}
-      <a href={`https://xkcd.com/${props.id}/`}>
-        <img src={props.img} alt={props.alt} />
+      <a href={`https://xkcd.com/${props.id}/`} title={props.title}>
+        <img
+          src={props.img}
+          alt={props.alt}
+          width={500}
+          height="auto"
+          loading="lazy"
+        />
         <h3>{props.title}</h3>
       </a>
-    </div>
+    </StyledCard>
   )
 }
 
