@@ -7,10 +7,11 @@ const StyledPopover = styled.div`
   width: 240px;
   padding: 16px;
   border-radius: 8px;
+  border: 2px solid #777;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  backdrop-filter: blur(2px);
+  backdrop-filter: blur(5px);
   font-size: 18px;
   color: #000;
 `
